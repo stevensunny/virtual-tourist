@@ -123,9 +123,11 @@ class TravelLocationController: UIViewController, MKMapViewDelegate {
             Pin.Keys.Longitude: locationCoordinate.longitude
         ]
         let pinObject = Pin(dictionary: pinDictionary, context: self.sharedContext)
-        pinObject.loadPhotos(sharedContext) {
+        
+        pinObject.loadPhotos(self.sharedContext) {
             CoreDataStackManager.sharedInstance().saveContext()
         }
+        
         
         // Store the pin Object to class variable for easy delete
         self.pins.append(pinObject)

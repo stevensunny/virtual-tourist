@@ -45,16 +45,20 @@ class Pin: NSManagedObject {
             } else {
                 if let photosDictionary = results.valueForKey("photo") as? [[String: AnyObject]] {
                     
-                    var photos = photosDictionary.map() {
-                        (dictionary: [String: AnyObject]) -> Photo in
+                    dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                        var photos = photosDictionary.map() {
+                            (dictionary: [String: AnyObject]) -> Photo in
+                            
+                            let photo = Photo(dictionary: dictionary, context: context)
+                            photo.pin = self
+                            
+                            
+                            return photo
+                        }
                         
-                        let photo = Photo(dictionary: dictionary, context: context)
-                        photo.pin = self
-                        
-                        return photo
-                    }
+                        completionHandler!()
+                    })
                     
-                    completionHandler!()
                 }
             }
             
