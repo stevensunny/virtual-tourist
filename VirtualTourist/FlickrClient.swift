@@ -43,8 +43,8 @@ class FlickrClient: NSObject {
             } else {
                 
                 // Parse the response data
-                var parsingError: NSError? = nil
-                let parsedResult = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &parsingError) as! NSDictionary
+                let parsingError: NSError? = nil
+                let parsedResult = (try! NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.AllowFragments)) as! NSDictionary
                 
                 if let error = parsingError {
                     completionHandler(results: nil, error: error)
@@ -66,8 +66,8 @@ class FlickrClient: NSObject {
     /**
     Given a dictionary of parameters, convert to a string for a url
     
-    :param: parameters Parameters to be converted
-    :returns: String containing the parameters url
+    - parameter parameters: Parameters to be converted
+    - returns: String containing the parameters url
     */
     class func escapedParameters(parameters: [String : AnyObject]) -> String {
         
@@ -86,16 +86,16 @@ class FlickrClient: NSObject {
             
         }
         
-        return (!urlVars.isEmpty ? "?" : "") + join("&", urlVars)
+        return (!urlVars.isEmpty ? "?" : "") + urlVars.joinWithSeparator("&")
     }
     
     /**
     Create bbox string parameter from latitude and longitude
     
-    :param: lat latitude
-    :param: lon longitude
+    - parameter lat: latitude
+    - parameter lon: longitude
     
-    :returns: string
+    - returns: string
     */
     class func createBBoxStringFromLatitude(lat: Double, andLongitude lon: Double) -> String {
         let bottom_left_lon = max(lon - Constants.BBoxHalfWidth, Constants.LonMin)

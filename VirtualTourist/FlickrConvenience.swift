@@ -14,9 +14,9 @@ extension FlickrClient {
     /**
     Get photos from the given latitude and longitude
     
-    :param: lat
-    :param: lon
-    :param: completionHandler
+    - parameter lat:
+    - parameter lon:
+    - parameter completionHandler:
     */
     func getPhotos(lat: Double, lon: Double, completionHandler: ( results: AnyObject!, errorString: String? ) -> Void ) {
         
@@ -27,7 +27,7 @@ extension FlickrClient {
         
         taskForGETMethod(parameters, completionHandler: { (results, error) -> Void in
             
-            if let error = error {
+            if let _ = error {
                 completionHandler(results: nil, errorString: "FlickrClient: getPhotos Request Failed")
             } else {
                 
@@ -64,9 +64,9 @@ extension FlickrClient {
     /**
     Get photos for the specified page
     
-    :param: page
-    :param: parameters
-    :param: completionHandler
+    - parameter page:
+    - parameter parameters:
+    - parameter completionHandler:
     */
     func getPhotosForPage(page: Int, parameters: [String: AnyObject], completionHandler: ( results: AnyObject!, errorString: String? ) -> Void ) {
         
@@ -75,7 +75,7 @@ extension FlickrClient {
         
         taskForGETMethod(newParameters, completionHandler: { (results, error) -> Void in
             
-            if let error = error {
+            if let _ = error {
                 completionHandler(results: nil, errorString: "FlickrClient: getPhotosForPage Request Failed")
             } else {
                 
@@ -106,10 +106,10 @@ extension FlickrClient {
     /**
     Get image data from URL
     
-    :param: url
-    :param: completion
+    - parameter url:
+    - parameter completion:
     
-    :returns: NSURLSessionTask
+    - returns: NSURLSessionTask
     */
     func getDataFromUrl(url:NSURL, completion: ((data: NSData?, response: NSURLResponse?, error: NSError? ) -> Void)) -> NSURLSessionTask {
         let task = session.dataTaskWithURL(url) { (data, response, error) in
@@ -124,7 +124,7 @@ extension FlickrClient {
     /**
     Download image
     
-    :param: url
+    - parameter url:
     */
     func downloadImage(url: NSURL, completionHandler: (image: UIImage?, errorString: String?) -> Void ) -> NSURLSessionTask {
         

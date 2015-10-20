@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>37C3CF47-1040-4242-9F41-1B81EEB1A770</string>
 	<key>IDESourceControlProjectName</key>
-	<string>project</string>
+	<string>VirtualTourist</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>EAA1D316C44A8E809ECE0F332D6A26F07A679DBA</key>
 		<string>https://github.com/stevensunny/virtual-tourist.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>VirtualTourist.xcodeproj/project.xcworkspace</string>
+	<string>VirtualTourist.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>EAA1D316C44A8E809ECE0F332D6A26F07A679DBA</key>

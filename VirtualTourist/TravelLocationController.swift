@@ -80,7 +80,7 @@ class TravelLocationController: UIViewController, MKMapViewDelegate {
             
             self.pins = self.fetchAllPins()
             
-            for (index, pin) in enumerate(self.pins) {
+            for (index, pin) in self.pins.enumerate() {
                 
                 // Determine coordinate
                 let lat = CLLocationDegrees(pin.latitude)
@@ -88,7 +88,7 @@ class TravelLocationController: UIViewController, MKMapViewDelegate {
                 let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
                 
                 // Construct the annotation, notice that we store the index to subtitle for easy fetching
-                var annotation = MKPointAnnotation()
+                let annotation = MKPointAnnotation()
                 annotation.coordinate = coordinate
                 annotation.subtitle = String(index)
                 
@@ -105,7 +105,7 @@ class TravelLocationController: UIViewController, MKMapViewDelegate {
     /**
     Drop pin on the map
     
-    :param: sender
+    - parameter sender:
     */
     func dropPin(sender: UIGestureRecognizer) {
         // Do not allow multiple pins to be dropped from 1 long press
@@ -146,7 +146,7 @@ class TravelLocationController: UIViewController, MKMapViewDelegate {
     /**
     Activate the edit / delete mode. In this mode, pin tapped will be deleted
     
-    :param: sender
+    - parameter sender:
     */
     @IBAction func editAction(sender: UIBarButtonItem) {
         if ( self.editButton.title == "Edit") {
@@ -173,20 +173,26 @@ class TravelLocationController: UIViewController, MKMapViewDelegate {
     // MARK: - Core Data Convenience
     
     var sharedContext: NSManagedObjectContext {
-        return CoreDataStackManager.sharedInstance().managedObjectContext!
+        return CoreDataStackManager.sharedInstance().managedObjectContext
     }
     
     /**
     Fetch all pins from the database
     
-    :returns: Array of Pins
+    - returns: Array of Pins
     */
     func fetchAllPins() -> [Pin] {
         let error: NSErrorPointer = nil
         let fetchRequest = NSFetchRequest(entityName: "Pin")
-        let results = sharedContext.executeFetchRequest(fetchRequest, error: error)
+        let results: [AnyObject]?
+        do {
+            results = try sharedContext.executeFetchRequest(fetchRequest)
+        } catch let error1 as NSError {
+            error.memory = error1
+            results = nil
+        }
         if error != nil {
-            println("Error in fetchAllPins(): \(error)")
+            print("Error in fetchAllPins(): \(error)")
         }
         return results as! [Pin]
     }
@@ -196,7 +202,7 @@ class TravelLocationController: UIViewController, MKMapViewDelegate {
     /**
     Annotations / Pin configurations
     */
-    func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         let reuseId = "pin"
         
         var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
@@ -215,10 +221,10 @@ class TravelLocationController: UIViewController, MKMapViewDelegate {
     /**
     When a region changed, we persist the latest region
     
-    :param: mapView
-    :param: animated
+    - parameter mapView:
+    - parameter animated:
     */
-    func mapView(mapView: MKMapView!, regionDidChangeAnimated animated: Bool) {
+    func mapView(mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         UserMapRegion.sharedInstance().saveRegion(mapView.region)
     }
     
@@ -226,16 +232,16 @@ class TravelLocationController: UIViewController, MKMapViewDelegate {
     Handle pin tapped. If deleteMode is ON, then we delete the pin
     If deleteMode is OFF, then we navigate to Photo Album view
     
-    :param: mapView
-    :param: view
+    - parameter mapView:
+    - parameter view:
     */
-    func mapView(mapView: MKMapView!, didSelectAnnotationView view: MKAnnotationView!) {
+    func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
 
         if deleteMode {
             
             // Delete Mode is ON, we delete the pin
-            if let indexString = view.annotation.subtitle {
-                let index = indexString.toInt()!
+            if let indexString = view.annotation!.subtitle {
+                let index = Int(indexString!)!
                 
                 // Remove pin from map
                 self.mapView.removeAnnotation(self.pinAnnotations[index])
@@ -268,8 +274,8 @@ class TravelLocationController: UIViewController, MKMapViewDelegate {
             let photoAlbumController: PhotoAlbumController = segue.destinationViewController as! PhotoAlbumController
             
             let annotationView = sender as! MKAnnotationView
-            let index = annotationView.annotation.subtitle!.toInt()
-            let selectedPin = self.pins[index!]
+            let index = Int(annotationView.annotation!.subtitle!!)!
+            let selectedPin = self.pins[index]
 
             photoAlbumController.selectedPin = selectedPin
         }

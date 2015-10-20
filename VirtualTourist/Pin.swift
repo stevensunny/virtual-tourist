@@ -41,12 +41,12 @@ class Pin: NSManagedObject {
         FlickrClient.sharedInstance().getPhotos(latitude, lon: longitude) { (results, errorString) -> Void in
             
             if let errorString = errorString {
-                println(errorString)
+                print(errorString)
             } else {
                 if let photosDictionary = results.valueForKey("photo") as? [[String: AnyObject]] {
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        var photos = photosDictionary.map() {
+                        _ = photosDictionary.map() {
                             (dictionary: [String: AnyObject]) -> Photo in
                             
                             let photo = Photo(dictionary: dictionary, context: context)

@@ -37,9 +37,9 @@ class PhotoAlbumController: UIViewController, MKMapViewDelegate, UICollectionVie
     */
     func configureUI() {
         // Set navigation buttons
-        var logoutButton: UIBarButtonItem = UIBarButtonItem(title: "Logout", style: .Plain, target: self, action: "processLogout")
-        var refreshButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Refresh, target: self, action: "refreshStudentLocations")
-        var postLocationButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "pin"), style: .Plain, target: self, action: "displayPostStudentLocationModal")
+        let logoutButton: UIBarButtonItem = UIBarButtonItem(title: "Logout", style: .Plain, target: self, action: "processLogout")
+        let refreshButton: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Refresh, target: self, action: "refreshStudentLocations")
+        let postLocationButton: UIBarButtonItem = UIBarButtonItem(image: UIImage(named: "pin"), style: .Plain, target: self, action: "displayPostStudentLocationModal")
         
         self.parentViewController!.navigationItem.leftBarButtonItem = logoutButton
         self.parentViewController!.navigationItem.rightBarButtonItems = [refreshButton, postLocationButton]
@@ -56,7 +56,7 @@ class PhotoAlbumController: UIViewController, MKMapViewDelegate, UICollectionVie
             let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
             
             // Construct the annotation, notice that we store the index to subtitle for easy fetching
-            var annotation = MKPointAnnotation()
+            let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
             
             // Add pin to map
@@ -77,7 +77,7 @@ class PhotoAlbumController: UIViewController, MKMapViewDelegate, UICollectionVie
     // MARK: - Core Data Convenience
     
     var sharedContext: NSManagedObjectContext {
-        return CoreDataStackManager.sharedInstance().managedObjectContext!
+        return CoreDataStackManager.sharedInstance().managedObjectContext
     }
     
     // MARK: - Collection View Delegate & Data Source
@@ -99,8 +99,8 @@ class PhotoAlbumController: UIViewController, MKMapViewDelegate, UICollectionVie
     /**
     If collection view cell is tapped, we delete the photo
     
-    :param: collectionView
-    :param: indexPath
+    - parameter collectionView:
+    - parameter indexPath:
     */
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         // Delete the photo from Core Data
@@ -115,11 +115,11 @@ class PhotoAlbumController: UIViewController, MKMapViewDelegate, UICollectionVie
     /**
     Configure collection view cell photo
     
-    :param: cell
-    :param: photo
+    - parameter cell:
+    - parameter photo:
     */
     func configureCell(cell: PhotoCollectionViewCell, photo: Photo) {
-        var image = UIImage(named: "PhotoPlaceholder")
+        let image = UIImage(named: "PhotoPlaceholder")
         
         // By default, display the loading picture and rotate the image view
         cell.photoImage!.image = image
@@ -137,8 +137,8 @@ class PhotoAlbumController: UIViewController, MKMapViewDelegate, UICollectionVie
                     
                     let task = FlickrClient.sharedInstance().downloadImage(imageURL, completionHandler: { (image, errorString) -> Void in
                         
-                        if let error = errorString {
-                            println("Error downloading image")
+                        if let errorString = errorString {
+                            print(errorString)
                         } else {
                             photo.image = image
                             
@@ -153,7 +153,7 @@ class PhotoAlbumController: UIViewController, MKMapViewDelegate, UICollectionVie
                     cell.taskToCancelifCellIsReused = task
                     
                 } else {
-                    println("Error parsing image URL")
+                    print("Error parsing image URL")
                 }
                 
             }
@@ -167,7 +167,7 @@ class PhotoAlbumController: UIViewController, MKMapViewDelegate, UICollectionVie
     /**
     Annotations / Pin configurations
     */
-    func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         let reuseId = "pin"
         
         var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
@@ -187,7 +187,7 @@ class PhotoAlbumController: UIViewController, MKMapViewDelegate, UICollectionVie
     /**
     Download new photos
     
-    :param: sender
+    - parameter sender:
     */
     @IBAction func downloadNewCollection(sender: UIButton) {
         // Delete ALL the current photos

@@ -26,7 +26,7 @@ class UserMapRegion {
     /**
     Save map region to NSUserDefaults
     
-    :param: region
+    - parameter region:
     */
     func saveRegion(region: MKCoordinateRegion) {
         let latitude = region.center.latitude
@@ -37,13 +37,13 @@ class UserMapRegion {
         userDefaults.setDouble(latitude, forKey: "regionLatitude")
         userDefaults.setDouble(longitude, forKey: "regionLongitude")
         userDefaults.setDouble(latitudeDelta, forKey: "regionLatitudeDelta")
-        userDefaults.setDouble(latitudeDelta, forKey: "regionLongitudeDelta")
+        userDefaults.setDouble(longitudeDelta, forKey: "regionLongitudeDelta")
     }
     
     /**
     Get the latest saved map region from NSUserDefaults
     
-    :returns: Latest saved region
+    - returns: Latest saved region
     */
     func getLatestSavedRegion() -> MKCoordinateRegion? {
         let latitude = userDefaults.doubleForKey("regionLatitude")
